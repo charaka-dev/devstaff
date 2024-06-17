@@ -56,6 +56,7 @@ CREATE TABLE harvest_submission_tbl (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (harvestId),
     UNIQUE (harvestId),
+    UNIQUE (submitId),
     FOREIGN KEY (seasonId) REFERENCES seasons_tbl(seasonId),
     FOREIGN KEY (prodId) REFERENCES products(prodId),
     FOREIGN KEY (fieldId) REFERENCES fields_tbl(fieldId),

@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class CropsPlantResponseDTO extends CorpsBase{
-    private String submittedId;
+    private Long submittedId;
 }

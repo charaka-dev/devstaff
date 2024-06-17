@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class HarvestRequestDTO extends CorpsBase {
     private double actualYield;
-    private String cropsPlantedId;
+    private long cropsPlantedId;
 }

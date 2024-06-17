@@ -11,7 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface FarmDataSubmissionRepo extends JpaRepository<HarvestSubmission, Long> {
-
-    @Query("SELECT e FROM HarvestSubmission e WHERE e.submitId = :submitID")
     Optional<HarvestSubmission> findBySubmitId(String submitID);
 }

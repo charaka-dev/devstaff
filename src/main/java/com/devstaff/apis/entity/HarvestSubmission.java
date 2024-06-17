@@ -1,12 +1,7 @@
 package com.devstaff.apis.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -15,9 +10,19 @@ public class HarvestSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String submitId;
     private int seasonId;
     private int prodId;
+
+    public String getSubmitId() {
+        return submitId;
+    }
+
+    public void setSubmitId(String submitId) {
+        this.submitId = submitId;
+    }
+
     private int fieldId;
     private int farmId;
     private double plantingArea;

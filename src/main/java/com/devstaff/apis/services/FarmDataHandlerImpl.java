@@ -30,8 +30,9 @@ public class FarmDataHandlerImpl implements FarmDataHandler{
 
         Arrays.stream(requestDTO.data).forEach(record ->{
             HarvestRequestDTO harvestRequestDTO = (HarvestRequestDTO) record;
-            String subId =harvestRequestDTO.getCropsPlantedId();
-            Optional<HarvestSubmission> submittedObj = submissionRepo.findBySubmitId(subId);
+           // String subId =harvestRequestDTO.getCropsPlantedId();
+           // Optional<HarvestSubmission> submittedObj = submissionRepo.findBySubmitId(subId);
+            Optional<HarvestSubmission> submittedObj = submissionRepo.findById(harvestRequestDTO.getCropsPlantedId());
             if (submittedObj.isPresent()) {
                 HarvestSubmission submission = submittedObj.get();
                 submission.setActualYield(harvestRequestDTO.getActualYield()); // Update the actual amount
@@ -53,9 +54,9 @@ public class FarmDataHandlerImpl implements FarmDataHandler{
         List<CropsPlantResponseDTO> list = new ArrayList<CropsPlantResponseDTO>();
         Arrays.stream(requestDTO.data).forEach(record ->{
             UUID uuid = UUID.randomUUID();
-            submissionRepo.saveAndFlush(CropPlantMapper.toEntity((CropsPlantRequestDTO) record));
+            HarvestSubmission submittedObj = submissionRepo.saveAndFlush(CropPlantMapper.toEntity((CropsPlantRequestDTO) record));
             CropsPlantResponseDTO destinationDTO = modelMapper.map((CropsPlantRequestDTO) record, CropsPlantResponseDTO.class);
-            destinationDTO.setSubmittedId(uuid.toString());
+            destinationDTO.setSubmittedId(submittedObj.getId());
             list.add(destinationDTO);
 
         });
