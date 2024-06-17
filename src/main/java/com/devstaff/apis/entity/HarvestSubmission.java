@@ -15,6 +15,7 @@ public class HarvestSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String submitId;
     private int seasonId;
     private int prodId;
     private int fieldId;

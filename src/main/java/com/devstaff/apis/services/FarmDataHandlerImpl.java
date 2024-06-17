@@ -4,12 +4,11 @@ import com.devstaff.apis.dto.*;
 import com.devstaff.apis.entity.HarvestSubmission;
 import com.devstaff.apis.mappers.CropPlantMapper;
 import com.devstaff.apis.repository.FarmDataSubmissionRepo;
-import jakarta.persistence.Entity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Handle data manipulation and constructing of farm data
@@ -23,29 +22,46 @@ public class FarmDataHandlerImpl implements FarmDataHandler{
     ModelMapper modelMapper;
     @Autowired
     FarmDataSubmissionRepo submissionRepo;
-    @Override
-    public BaseResponse<HarvestResponseDTO> updateHarvestData(HarvestRequestDTO requestDTO) {
-        Optional<HarvestSubmission> submittedObj = submissionRepo.findById(requestDTO.getCropsPlantedId());
-        if (submittedObj.isPresent()) {
-            HarvestSubmission submission = submittedObj.get();
-            submission.setActualYield(requestDTO.getActualYield()); // Update the actual amount
-            // Save the updated entity
-            submissionRepo.saveAndFlush(submission);
-        }
+
+    public BaseResponse updateHarvestData(BaseRequest requestDTO) {
+
         BaseResponse<HarvestResponseDTO> response = new BaseResponse();
-        HarvestResponseDTO destinationDTO = modelMapper.map(requestDTO, HarvestResponseDTO.class);
-        response.setResponseObject(destinationDTO);
-        response.setResponseStatus( "Actual Yield is Saved");
+        List<HarvestResponseDTO> list = new ArrayList<HarvestResponseDTO>();
+
+        Arrays.stream(requestDTO.data).forEach(record ->{
+            HarvestRequestDTO harvestRequestDTO = (HarvestRequestDTO) record;
+            String subId =harvestRequestDTO.getCropsPlantedId();
+            Optional<HarvestSubmission> submittedObj = submissionRepo.findBySubmitId(subId);
+            if (submittedObj.isPresent()) {
+                HarvestSubmission submission = submittedObj.get();
+                submission.setActualYield(harvestRequestDTO.getActualYield()); // Update the actual amount
+                // Save the updated entity
+                submissionRepo.saveAndFlush(submission);
+                HarvestResponseDTO destinationDTO = modelMapper.map(submittedObj, HarvestResponseDTO.class);
+                list.add(destinationDTO);
+            }
+        });
+        response.setResponseObject(list);
+        response.setResponseMessage( "Actual Yield are updated for Submitted IDs ");
         return response;
     }
 
     @Override
-    public BaseResponse savePlantedData(CropsPlantRequestDTO requestDTO) {
-        HarvestSubmission savedId = submissionRepo.saveAndFlush(CropPlantMapper.toEntity(requestDTO));
+    public BaseResponse savePlantedData(BaseRequest requestDTO) {
+
         BaseResponse<CropsPlantResponseDTO> response = new BaseResponse();
-        CropsPlantResponseDTO destinationDTO = modelMapper.map(requestDTO, CropsPlantResponseDTO.class);
-        response.setResponseObject(destinationDTO);
-        response.setResponseStatus( "Planted Data Saved");
+        List<CropsPlantResponseDTO> list = new ArrayList<CropsPlantResponseDTO>();
+        Arrays.stream(requestDTO.data).forEach(record ->{
+            UUID uuid = UUID.randomUUID();
+            submissionRepo.saveAndFlush(CropPlantMapper.toEntity((CropsPlantRequestDTO) record));
+            CropsPlantResponseDTO destinationDTO = modelMapper.map((CropsPlantRequestDTO) record, CropsPlantResponseDTO.class);
+            destinationDTO.setSubmittedId(uuid.toString());
+            list.add(destinationDTO);
+
+        });
+        response.setResponseObject(list);
+        response.setDatetime(new Date());
+        response.setResponseMessage("Planted Data Saved");
         return response;
     }
 }

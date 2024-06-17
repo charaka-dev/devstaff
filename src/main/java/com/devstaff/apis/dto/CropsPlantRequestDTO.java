@@ -7,5 +7,6 @@ import lombok.Data;
 public class CropsPlantRequestDTO extends CorpsBase{
     private double plantingArea;
     private double expectedYield;
+    private String submitID;
 
 }

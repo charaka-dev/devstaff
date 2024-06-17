@@ -44,6 +44,7 @@ CREATE TABLE products (
 
 CREATE TABLE harvest_submission_tbl (
     harvestId INT NOT NULL AUTO_INCREMENT,
+    submitId varchar(200),
     seasonId INT,
     prodId INT,
     fieldId INT,

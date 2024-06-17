@@ -1,5 +1,6 @@
 package com.devstaff.apis.controllers;
 
+import com.devstaff.apis.dto.BaseRequest;
 import com.devstaff.apis.dto.BaseResponse;
 import com.devstaff.apis.dto.CropsPlantRequestDTO;
 import com.devstaff.apis.dto.HarvestRequestDTO;
@@ -25,7 +26,7 @@ public class HarvestStatistics {
      * @return
      */
     @RequestMapping(path = "/planted" , method = RequestMethod.POST)
-    public ResponseEntity submitPlanted(@RequestBody CropsPlantRequestDTO requestDTO){
+    public ResponseEntity submitPlanted(@RequestBody BaseRequest<CropsPlantRequestDTO> requestDTO){
         BaseResponse response = farmDataHandler.savePlantedData(requestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -35,8 +36,12 @@ public class HarvestStatistics {
      * @return
      */
     @RequestMapping(path = "/harvested" , method = RequestMethod.POST)
-    public ResponseEntity submitHarvested(@RequestBody HarvestRequestDTO requestDTO){
+    public ResponseEntity submitHarvested(@RequestBody BaseRequest<HarvestRequestDTO> requestDTO){
         BaseResponse response = farmDataHandler.updateHarvestData(requestDTO);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        if (! response.getResponseMessage().startsWith("Submission ID is incorrect")){
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }else {
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 }
