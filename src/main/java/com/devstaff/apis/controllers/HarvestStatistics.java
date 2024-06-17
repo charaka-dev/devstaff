@@ -2,6 +2,7 @@ package com.devstaff.apis.controllers;
 
 import com.devstaff.apis.dto.BaseResponse;
 import com.devstaff.apis.dto.CropsPlantRequestDTO;
+import com.devstaff.apis.dto.HarvestRequestDTO;
 import com.devstaff.apis.services.FarmDataHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,15 +19,24 @@ public class HarvestStatistics {
     @Autowired
     FarmDataHandler farmDataHandler;
 
+    /**
+     * Save initial plantation and expected yields
+     * @param requestDTO
+     * @return
+     */
     @RequestMapping(path = "/planted" , method = RequestMethod.POST)
     public ResponseEntity submitPlanted(@RequestBody CropsPlantRequestDTO requestDTO){
         BaseResponse response = farmDataHandler.savePlantedData(requestDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * Updte actula harvest
+     * @return
+     */
     @RequestMapping(path = "/harvested" , method = RequestMethod.POST)
-    public ResponseEntity submitHarvested(){
-        BaseResponse response = farmDataHandler.savePlantedData(requestDTO);
-        return new ResponseEntity<>("submitHarvested", HttpStatus.CREATED);
+    public ResponseEntity submitHarvested(@RequestBody HarvestRequestDTO requestDTO){
+        BaseResponse response = farmDataHandler.updateHarvestData(requestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

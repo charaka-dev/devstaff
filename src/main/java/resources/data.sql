@@ -14,5 +14,5 @@ INSERT INTO fields_tbl (abbrName) VALUES ('Field 1');
 INSERT INTO products (productName) VALUES ('Wheat');
 
 -- Inserting into harvest_submission_tbl
-INSERT INTO harvest_submission_tbl (seasonId, prodId, fieldId, farmId, createdAt)
-VALUES (1, 1, 1, 1, '2024-06-01');
+--INSERT INTO harvest_submission_tbl (seasonId, prodId, fieldId, farmId, createdAt)
+--VALUES (1, 1, 1, 1, '2024-06-01');

@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS farmers_tbl;
+DROP TABLE IF EXISTS seasons_tbl;
+DROP TABLE IF EXISTS farm_tbl;
+DROP TABLE IF EXISTS fields_tbl;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS harvest_submission_tbl;
+
 CREATE TABLE farmers_tbl (
     usersId INT NOT NULL AUTO_INCREMENT,
     farmerName VARCHAR(100) DEFAULT NULL,
